@@ -1,0 +1,16 @@
+# copias de seguridad de la base
+backup*.sql
+
+# variables de entorno (si más adelante usan .env)
+.env
+
+# Python
+__pycache__/
+.venv/
+
+# editores
+.vscode/
+.idea/
+
+# archivos temporales de draw.io
+*.bkp
