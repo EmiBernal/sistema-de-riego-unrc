@@ -98,7 +98,7 @@ CREATE TABLE deshabilitacion (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fecha_inicio DATE,
     fecha_fin DATE,
-    motivo VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
     camion_id INT NOT NULL,
     FOREIGN KEY (camion_id) REFERENCES camion(id)
 );
@@ -120,6 +120,7 @@ CREATE TABLE recorrido (
     fecha DATE,
     hora_inicio DATETIME,
     hora_fin DATETIME,
+    estado ENUM('LLUVIA','FERIADO','NORMAL') NOT NULL DEFAULT 'NORMAL',
     distancia_total DOUBLE,
     camion_id INT NOT NULL,
     regador_id INT, -- puede ser NULL por ahora (participacion parcial en conduce)
