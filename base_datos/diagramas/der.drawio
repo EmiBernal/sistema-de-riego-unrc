@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Página-1" id="RD5K-L5EJB6-7Kj29T68">
-    <mxGraphModel dx="745" dy="504" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2040" dy="1947" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -109,14 +109,14 @@
         <mxCell id="idXcw7IMEWdLv_hL65UL-33" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="fecha_hasta" vertex="1">
           <mxGeometry height="40" width="100" x="836" y="540" as="geometry" />
         </mxCell>
-        <mxCell id="idXcw7IMEWdLv_hL65UL-34" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="dni" vertex="1">
+        <mxCell id="idXcw7IMEWdLv_hL65UL-34" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="&lt;u&gt;dni&lt;/u&gt;" vertex="1">
           <mxGeometry height="40" width="100" x="230" y="520" as="geometry" />
         </mxCell>
         <mxCell id="idXcw7IMEWdLv_hL65UL-36" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="telefono" vertex="1">
           <mxGeometry height="40" width="100" x="200" y="660" as="geometry" />
         </mxCell>
         <mxCell id="idXcw7IMEWdLv_hL65UL-37" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="info_seguro" vertex="1">
-          <mxGeometry height="40" width="100" x="170" y="620" as="geometry" />
+          <mxGeometry height="40" width="100" x="150" y="620" as="geometry" />
         </mxCell>
         <mxCell id="idXcw7IMEWdLv_hL65UL-38" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="carnet_conducir" vertex="1">
           <mxGeometry height="40" width="100" x="160" y="560" as="geometry" />
@@ -366,6 +366,11 @@
             <mxPoint x="1290" y="830" as="targetPoint" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="aR9VfYO0CPZh9MxlQyt3-5" edge="1" parent="1" source="idXcw7IMEWdLv_hL65UL-103" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="800" y="1030" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="idXcw7IMEWdLv_hL65UL-103" parent="1" style="shape=rhombus;perimeter=rhombusPerimeter;whiteSpace=wrap;html=1;align=center;" value="realiza" vertex="1">
           <mxGeometry height="60" width="120" x="618" y="1000" as="geometry" />
         </mxCell>
@@ -454,7 +459,7 @@
           <mxGeometry height="40" width="116" x="960" y="1180" as="geometry" />
         </mxCell>
         <mxCell id="idXcw7IMEWdLv_hL65UL-125" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="hora_que_paso" vertex="1">
-          <mxGeometry height="40" width="100" x="920" y="1080" as="geometry" />
+          <mxGeometry height="40" width="100" x="916" y="1080" as="geometry" />
         </mxCell>
         <mxCell id="idXcw7IMEWdLv_hL65UL-126" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="&lt;span style=&quot;border-bottom: 1px dotted;&quot;&gt;id&lt;/span&gt;" vertex="1">
           <mxGeometry height="40" width="100" x="1016" y="1099.5" as="geometry" />
@@ -819,6 +824,9 @@
         </mxCell>
         <mxCell id="idXcw7IMEWdLv_hL65UL-225" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="ISA" vertex="1">
           <mxGeometry height="30" width="60" x="334" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="aR9VfYO0CPZh9MxlQyt3-6" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;" value="estado" vertex="1">
+          <mxGeometry height="40" width="100" x="800" y="1010" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
