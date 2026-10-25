@@ -1,0 +1,11 @@
+# Servidor web
+Flask==3.0.3
+
+# Servidor web
+Flask-SQLAlchemy==3.1.1
+psycopg2-binary==2.9.9
+GeoAlchemy2==0.15.2   # manejar tipos geográficos de PostGIS (poligonos)
+
+
+# Geometrías en Python
+Shapely==2.0.6     # áreas, distancias, conversión a GeoJSON
