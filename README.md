@@ -10,14 +10,52 @@ la Municipalidad de Río Cuarto.
 
 ## Estructura
 
-- `base_datos/`: script SQL, `docker-compose.yml` y diagramas (DER Chen,
-  Crow's Foot y de clases).
+- `backend/`: aplicación Flask (`app.py`), `Dockerfile` y `requirements.txt`.
+- `frontend/`: plantillas Jinja2 (`templates/`) y archivos estáticos (`static/`).
+- `database/`: script SQL de inicialización (`init.sql`).
+- `docker-compose.yml`: define los servicios `db` y `web`.
+- `.env.example`: plantilla de variables de entorno.
 
-## Levantar la base de datos
+## Requisitos
 
-Requiere Docker. Desde la carpeta `base_datos/`:
+- Docker y Docker Compose.
 
-    docker compose up -d
+## Ejecucion del sistema
 
-La base queda disponible en `127.0.0.1:3307` (usuario `riego`, base `riego`).
-Más detalle en la documentación del equipo.
+1. Copiar la plantilla de variables de entorno:
+
+   cp .env.example .env
+
+2. Levantar el proyecto desde la raíz:
+
+   docker compose up --build o docker-compose up --build
+
+3. Abrir http://localhost:5000.
+
+Las siguientes veces alcanza con `docker compose up` o `docker-compose up`. Solo hace falta `--build` cuando cambian `requirements.txt` o el `Dockerfile`.
+
+## Base de datos
+
+- Motor: PostgreSQL 16 con PostGIS.
+- El esquema se crea automáticamente la primera vez desde
+  `database/init.sql`.
+
+Los datos persisten en el volumen `sistema_riego_data`.
+
+- Para consultar las tablas:
+  docker compose exec db psql -U app -d app_db -c "\dt"
+
+## Comandos útiles
+
+| Acción                        | Comando                                                     |
+| ----------------------------- | ----------------------------------------------------------- |
+| Levantar                      | `docker compose up` o `docker-compose up`                   |
+| Levantar en segundo plano     | `docker compose up -d` o `docker-compose up -d`             |
+| Apagar (conserva los datos)   | `docker compose down` o `docker-compose down`               |
+| Ver logs de la app            | `docker compose logs -f web` o `docker-compose logs -f web` |
+| Borrar todo, incluida la base | `docker compose down -v` o `docker-compose down -v`         |
+
+## Diagramas
+
+Los diagramas se encuentran en
+`docs/diagrama_clases/diagrama`>. Más detalle en la documentación del equipo.

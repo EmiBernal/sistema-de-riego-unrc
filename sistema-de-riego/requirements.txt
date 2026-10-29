@@ -9,3 +9,10 @@ GeoAlchemy2==0.15.2   # manejar tipos geográficos de PostGIS (poligonos)
 
 # Geometrías en Python
 Shapely==2.0.6     # áreas, distancias, conversión a GeoJSON
+
+# Login y register
+Flask-Login
+Flask-WTF
+Flask-Limiter
+argon2-cffi
+email-validator
