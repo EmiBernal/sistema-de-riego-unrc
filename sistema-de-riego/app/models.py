@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime, timezone
 
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import ENUM
@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     __tablename__ = "usuario"
 
     id = db.Column(db.Integer, primary_key=True)
-    fecha_alta = db.Column(db.Date, nullable=False, default=date.today)
+    fecha_alta = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     nombre = db.Column(db.String(255), nullable=False)
     apellido = db.Column(db.String(255), nullable=False)
     rol = db.Column(rol_usuario, nullable=False, default="REGADOR")
