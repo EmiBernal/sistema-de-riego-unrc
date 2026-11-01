@@ -17,16 +17,16 @@ class RegisterForm(FlaskForm):
     confirmar = PasswordField("Repetir contraseña", validators=[DataRequired(), EqualTo("password", message="Las contraseñas no coinciden")])
     submit = SubmitField("Crear cuenta")
 
-def validate_email(self, field):
-        field.data = field.data.strip().lower()
-
-def validate_password(self, field):
-        pwd = field.data
-        if not re.search(r"[A-Z]", pwd):
-            raise ValidationError("Debe incluir al menos una mayúscula")
-        if not re.search(r"[a-z]", pwd):
-            raise ValidationError("Debe incluir al menos una minúscula")
-        if not re.search(r"\d", pwd):
-            raise ValidationError("Debe incluir al menos un número")
-        if not re.search(r"[^\w\s]", pwd):
-            raise ValidationError("Debe incluir al menos un símbolo (!@#$...)")
+    def validate_email(self, field):
+            field.data = field.data.strip().lower()
+    
+    def validate_password(self, field):
+            pwd = field.data
+            if not re.search(r"[A-Z]", pwd):
+                raise ValidationError("Debe incluir al menos una mayúscula")
+            if not re.search(r"[a-z]", pwd):
+                raise ValidationError("Debe incluir al menos una minúscula")
+            if not re.search(r"\d", pwd):
+                raise ValidationError("Debe incluir al menos un número")
+            if not re.search(r"[^\w\s]", pwd):
+                raise ValidationError("Debe incluir al menos un símbolo (!@#$...)")
