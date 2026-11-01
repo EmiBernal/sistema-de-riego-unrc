@@ -47,13 +47,14 @@ Los datos persisten en el volumen `sistema_riego_data`.
 
 ## Comandos útiles
 
-| Acción                        | Comando                                                     |
-| ----------------------------- | ----------------------------------------------------------- |
-| Levantar                      | `docker compose up` o `docker-compose up`                   |
-| Levantar en segundo plano     | `docker compose up -d` o `docker-compose up -d`             |
-| Apagar (conserva los datos)   | `docker compose down` o `docker-compose down`               |
-| Ver logs de la app            | `docker compose logs -f web` o `docker-compose logs -f web` |
-| Borrar todo, incluida la base | `docker compose down -v` o `docker-compose down -v`         |
+| Acción                        | Comando                                                           |
+| ----------------------------- | ----------------------------------------------------------------- |
+| Levantar                      | `docker compose up` o `docker-compose up`                         |
+| Levantar en segundo plano     | `docker compose up -d` o `docker-compose up -d`                   |
+| Apagar (conserva los datos)   | `docker compose down` o `docker-compose down`                     |
+| Ver logs de la app            | `docker compose logs -f web` o `docker-compose logs -f web`       |
+| Borrar todo, incluida la base | `docker compose down -v` o `docker-compose down -v`               |
+| Ejecutar test                 | `docker compose exec web pytest o docker-compose exec web pytest` |
 
 ## Diagramas
 
