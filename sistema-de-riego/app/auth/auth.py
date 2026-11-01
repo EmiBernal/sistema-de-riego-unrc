@@ -35,6 +35,7 @@ def register():
             return "Formulario inválido", 400
         flash("Cuenta creada. Ya podes iniciar sesion.")
         return redirect(url_for("index"))
+    print(form.errors)
     return "Formulario inválido", 400
     
     #return render_template("auth/register.html", form=form)

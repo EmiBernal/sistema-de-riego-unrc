@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
 
 class RegisterForm(FlaskForm):
     nombre = StringField("nombre", validators=[DataRequired()])
-    apellido = StringField("apellido", validators=[DataRequired()])
+    apellido = StringField("apellido", validators=[DataRequired(message="Este campo es requerido")])
     email = EmailField("Email", validators=[DataRequired(), Email(message="Ingresá un email válido", check_deliverability=True), Length(max=254)])
     password = PasswordField("Contraseña", validators=[DataRequired(), Length(min=8, max=64, message="Debe tener entre 8 y 64 caracteres")])
     confirmar = PasswordField("Repetir contraseña", validators=[DataRequired(), EqualTo("password", message="Las contraseñas no coinciden")])
