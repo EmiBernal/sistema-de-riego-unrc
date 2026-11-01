@@ -87,13 +87,13 @@ def test_register_email_duplicado(client, app):
 
     with app.app_context():
         usuarios = db.session.execute(
-            db.select(User).filter_by(email="evaGomez@yahoo.com")
+            db.select(User).filter_by(email="evagomez@yahoo.com")
         ).scalars().all()
 
         assert len(usuarios) == 1
 
 
-# password demasiado corta o sin los requisitos que pidas
+# password demasiado corta 
 def test_register_password_invalidas(client):
     user1 = {
         "nombre": "Ana",
@@ -101,6 +101,68 @@ def test_register_password_invalidas(client):
         "email": "ana@gmail.com",
         "password": "nosirve",
         "confirmar": "nosirve",
+        "submit": "Crear cuenta"
+    }
+
+    response = client.post("auth/register", data=user1)
+
+    assert response.status_code == 400
+    assert response.data == "Formulario inválido".encode("utf-8")
+
+
+def test_register_password_sin_caracter_especial(client):
+    user1 = {
+        "nombre": "Ana",
+        "apellido": "Gomez",
+        "email": "ana@gmail.com",
+        "password": "Anio2026",
+        "confirmar": "Anio2026",
+        "submit": "Crear cuenta"
+    }
+
+    response = client.post("auth/register", data=user1)
+
+    assert response.status_code == 400
+    assert response.data == "Formulario inválido".encode("utf-8")
+
+
+def test_register_password_sin_numero(client):
+    user1 = {
+        "nombre": "Ana",
+        "apellido": "Gomez",
+        "email": "ana@gmail.com",
+        "password": "AnioVeinte!",
+        "confirmar": "AnioVeinte!",
+        "submit": "Crear cuenta"
+    }
+
+    response = client.post("auth/register", data=user1)
+
+    assert response.status_code == 400
+    assert response.data == "Formulario inválido".encode("utf-8")
+
+def test_register_password_sin_mayuscula(client):
+    user1 = {
+        "nombre": "Ana",
+        "apellido": "Gomez",
+        "email": "ana@gmail.com",
+        "password": "anioveinte2!",
+        "confirmar": "anioveinte2!",
+        "submit": "Crear cuenta"
+    }
+
+    response = client.post("auth/register", data=user1)
+
+    assert response.status_code == 400
+    assert response.data == "Formulario inválido".encode("utf-8")
+
+def test_register_password_sin_minuscula(client):
+    user1 = {
+        "nombre": "Ana",
+        "apellido": "Gomez",
+        "email": "ana@gmail.com",
+        "password": "BEBE2026!",
+        "confirmar": "BEBE2026!",
         "submit": "Crear cuenta"
     }
 
