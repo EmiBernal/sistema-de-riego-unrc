@@ -2,8 +2,9 @@ from dotenv import load_dotenv
 
 from flask import Flask
 from config import Config
-from app.models import db
 from app.auth.auth import auth_bp
+from .extensions import  db, limiter, login_manager
+
 
 load_dotenv()
 
@@ -17,6 +18,7 @@ def create_app(config_class=Config):
     # Registrar ñas rutas de autenticacion
     app.register_blueprint(auth_bp)
 
+    login_manager.init_app(app)
     @app.route("/")
     def index():
         return "Funciona"
