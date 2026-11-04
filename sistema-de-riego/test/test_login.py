@@ -20,6 +20,15 @@ def test_login_exitoso(client, usuario):
     assert response.status_code == 200
     assert response.get_data(as_text=True) == "Ok"
 
+def test_login_exitoso_normalizado(client, usuario):
+    response = client.post("/auth/login", data={
+        "email": "TEST@GMAIL.COM",
+        "password": "Clave123!",
+    })
+
+    assert response.status_code == 200
+    assert response.get_data(as_text=True) == "Ok"
+
 def test_login_email_incorrecto(client, usuario):
     response = client.post("auth/login", data = {
         "email": "test1@gmail.com",
