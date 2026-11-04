@@ -3,8 +3,11 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, EmailField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 
+def _normalizar_email(valor):
+    return valor.strip().lower() if valor else valor
+
 class LoginForm(FlaskForm):
-    email = EmailField("Email", validators=[DataRequired(), Email()])
+    email = EmailField("Email", validators=[DataRequired(), Email()], filters=[_normalizar_email])
     password = PasswordField("Contraseña", validators=[DataRequired()])
     recordarme = BooleanField("Recordarme")
     submit = SubmitField("Ingresar")
