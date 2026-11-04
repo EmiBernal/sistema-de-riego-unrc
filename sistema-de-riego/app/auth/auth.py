@@ -58,3 +58,14 @@ def login():
         login_user(user, remember=False)
         return "Ok", 200
     return "Datos incompletos", 400
+
+@auth_bp.route("/logout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    return "Ok", 200
+
+@auth_bp.route("/me")
+@login_required
+def me():
+    return {"email": current_user.email}
