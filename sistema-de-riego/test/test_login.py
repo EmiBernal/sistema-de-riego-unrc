@@ -10,6 +10,8 @@ def usuario(client):
         "confirmar": "Clave123!",
         "submit": "Crear cuenta",
     })
+    with client.session_transaction() as sess:
+        sess.clear()
 
 def test_login_exitoso(client, usuario):
     response = client.post("/auth/login", data={
@@ -73,3 +75,24 @@ def test_login_campo_password_vacio(client, usuario):
 
     assert response.status_code == 400
     assert response.data == "Datos incompletos".encode("utf-8")
+
+def test_login_exitoso_token(client, usuario):
+    response = client.post("/auth/login", data={
+        "email": "test@gmail.com",
+        "password": "Clave123!",
+    })
+
+    assert response.status_code == 200
+
+    with client.session_transaction() as sess:
+        assert "_user_id" in sess
+
+def test_login_fallidon_sin_token(client, usuario):
+    response = client.post("/auth/login", data={
+        "email": "test@gmal.com",
+        "password": "Clave123!"  
+    })
+
+    assert response.status_code == 401
+    with client.session_transaction() as sess:
+        assert "_user_id" not in sess
