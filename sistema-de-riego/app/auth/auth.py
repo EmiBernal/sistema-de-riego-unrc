@@ -33,11 +33,11 @@ def register():
         flash("Cuenta creada. Ya podes iniciar sesion.")
         return redirect(url_for("index"))
     print(form.errors)
-    return "Formulario inválido", 400
+    ##return "Formulario inválido", 400
     
-    #return render_template("auth/register.html", form=form)
+    return render_template("auth/register.html", form=form)
         
-@auth_bp.route("/login", methods=["POST"])
+@auth_bp.route("/login", methods=["GET","POST"])
 @limiter.limit("5 per minute", methods=["POST"])
 def login():
     form = LoginForm()

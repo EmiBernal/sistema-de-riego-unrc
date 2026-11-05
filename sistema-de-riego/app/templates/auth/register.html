@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de riego</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/output.css') }}"
+    />
+  </head>
+
+  <body class="bg-[#EAF0F8] min-h-screen flex flex-col">
+    <!-- HEADER -->
+    <header class="bg-[#123A7A] text-white">
+      <nav
+        class="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 gap-4"
+      >
+        <div>
+          <h2 class="text-sm sm:text-base font-semibold">
+            Municipalidad de Río Cuarto
+          </h2>
+          <p class="text-xs sm:text-sm text-blue-200">
+            Sistema de Gestión de Riego
+          </p>
+        </div>
+
+        <a
+          href=""
+          class="text-xs sm:text-sm hover:text-blue-200 whitespace-nowrap"
+        >
+          Volver al inicio
+        </a>
+      </nav>
+    </header>
+
+    <!-- CARD DE REGISTRO -->
+    <main class="flex-1 flex justify-center items-center px-4 py-6 sm:py-8">
+      <section
+        class="w-full max-w-2xl bg-white p-5 sm:p-8 rounded-md border border-[#C3D1E6]"
+      >
+        <div class="mb-5 sm:mb-6">
+          <h1 class="text-xl sm:text-2xl text-[#123A7A] font-semibold">
+            Solicitud de acceso
+          </h1>
+
+          <p class="text-sm text-[#4B5B75] mt-2">
+            Los campos son obligatorios. Tu solicitud será revisada por un
+            administrador.
+          </p>
+        </div>
+
+        <form action="">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-[#17233A]" for="nombre">
+                Nombre
+              </label>
+              <input
+                id="nombre"
+                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
+                type="text"
+                name="nombre"
+                required
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-[#17233A]" for="apellido">
+                Apellido
+              </label>
+              <input
+                id="apellido"
+                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
+                type="text"
+                name="apellido"
+                required
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-[#17233A]" for="email">
+                Correo electrónico
+              </label>
+              <input
+                id="email"
+                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
+                type="email"
+                name="email"
+                required
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-[#17233A]" for="rol">
+                Rol
+              </label>
+              <select
+                id="rol"
+                name="rol"
+                required
+                class="w-full border border-[#6F829F] py-2 px-3 rounded-sm text-[#17233A]"
+              >
+                <option value="">Seleccioná un rol</option>
+                <option value="administrador">Administrador</option>
+                <option value="usuario">Usuario</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-[#17233A]" for="password">
+                Contraseña
+              </label>
+              <input
+                id="password"
+                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
+                type="password"
+                name="password"
+                required
+              />
+              <p class="text-xs mt-1 text-[#4B5B75]">
+                Mínimo 8 caracteres, con letras y números.
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium text-[#17233A]" for="confirmar">
+                Repetir contraseña
+              </label>
+              <input
+                id="confirmar"
+                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
+                type="password"
+                name="confirmar"
+                required
+              />
+            </div>
+
+            <div
+              class="flex items-start sm:items-center gap-2 col-span-1 md:col-span-2 mt-2"
+            >
+              <input
+                type="checkbox"
+                id="condiciones"
+                name="condiciones"
+                required
+                class="w-4 h-4 mt-0.5 sm:mt-0 accent-[#123A7A] shrink-0"
+              />
+              <label for="condiciones" class="text-sm text-[#4B5B75]">
+                Acepto los términos de uso y el tratamiento de mis datos
+                personales.
+              </label>
+            </div>
+          </div>
+
+          <div class="flex justify-end mt-5 sm:mt-6">
+            <button
+              class="w-full sm:w-auto bg-[#123A7A] px-6 py-2 text-white text-base rounded-sm hover:bg-[#1B4F9C] transition-colors"
+              type="submit"
+            >
+              Enviar solicitud
+            </button>
+          </div>
+        </form>
+
+        <div class="flex justify-center">
+          <p
+            class="mt-5 sm:mt-6 text-sm sm:text-[15px] text-[#4B5B75] text-center"
+          >
+            ¿Ya tenés cuenta?
+            <a class="text-[#1B4F9C] hover:underline" href="">
+              Iniciá sesión
+            </a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[#C3D1E6] bg-white">
+      <div class="flex justify-center px-4 py-3 sm:py-4">
+        <p class="text-[#4B5B75] text-xs sm:text-sm text-center">
+          Riego en la ciudad · Río Cuarto, Córdoba
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
