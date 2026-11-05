@@ -8,7 +8,9 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+RUN tailwindcss --help
 
 COPY . .
+RUN tailwindcss -i app/static/src/input.css -o app/static/css/output.css --minify
 
 CMD ["python", "run.py"]

@@ -22,3 +22,6 @@ pytest
 
 # Variables de entorno
 python-dotenv
+
+# CSS
+pytailwindcss
