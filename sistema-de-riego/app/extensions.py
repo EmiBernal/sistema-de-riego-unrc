@@ -5,8 +5,17 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 
+
 db = SQLAlchemy()
 csrf = CSRFProtect()
 login_manager = LoginManager()
 limiter = Limiter(get_remote_address, default_limits=["200 per hour"])
 ph = PasswordHasher()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return "No autorizado", 401
