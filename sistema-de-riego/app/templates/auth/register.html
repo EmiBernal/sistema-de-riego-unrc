@@ -111,13 +111,26 @@
               <label class="text-sm font-medium text-[#17233A]" for="password">
                 Contraseña
               </label>
-              <input
-                id="password"
-                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
-                type="password"
-                name="password"
-                required
-              />
+              <div class="relative">
+                <input
+                  id="password"
+                  class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
+                  type="password"
+                  name="password"
+                  required
+                />
+                <button
+                  type="button"
+                  onclick="mostrarPassword('password', 'icon-password')"
+                  class="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  <i
+                    id="icon-password"
+                    data-lucide="eye"
+                    class="w-5 h-5 text-[#17233A] opacity-60"
+                  ></i>
+                </button>
+              </div>
               <p class="text-xs mt-1 text-[#4B5B75]">
                 Mínimo 8 caracteres, con letras y números.
               </p>
@@ -127,13 +140,26 @@
               <label class="text-sm font-medium text-[#17233A]" for="confirmar">
                 Repetir contraseña
               </label>
-              <input
-                id="confirmar"
-                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
-                type="password"
-                name="confirmar"
-                required
-              />
+              <div class="relative">
+                <input
+                  id="confirmar"
+                  class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
+                  type="password"
+                  name="confirmar"
+                  required
+                />
+                <button
+                  type="button"
+                  onclick="mostrarPassword('confirmar', 'icon-confirmar')"
+                  class="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  <i
+                    id="icon-confirmar"
+                    data-lucide="eye"
+                    class="w-5 h-5 text-[#17233A] opacity-60"
+                  ></i>
+                </button>
+              </div>
             </div>
 
             <div
@@ -184,5 +210,8 @@
         </p>
       </div>
     </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
   </body>
 </html>
