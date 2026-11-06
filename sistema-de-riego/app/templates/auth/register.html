@@ -50,75 +50,34 @@
           </p>
         </div>
 
-        <form action="">
+        <form method="post" action="{{ url_for('auth.register') }}">
+          {{ form.hidden_tag() }}
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-[#17233A]" for="nombre">
-                Nombre
-              </label>
-              <input
-                id="nombre"
-                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
-                type="text"
-                name="nombre"
-                required
-              />
+              {{ form.nombre.label(class="text-sm font-medium text-[#17233A]")
+              }} {{ form.nombre( class="border border-[#6F829F] py-2 px-2
+              rounded-sm" ) }}
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-[#17233A]" for="apellido">
-                Apellido
-              </label>
-              <input
-                id="apellido"
-                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
-                type="text"
-                name="apellido"
-                required
-              />
+              {{ form.apellido.label(class="text-sm font-medium text-[#17233A]")
+              }} {{ form.apellido( class="border border-[#6F829F] py-2 px-2
+              rounded-sm" ) }}
             </div>
 
-            <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-[#17233A]" for="email">
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
-                type="email"
-                name="email"
-                required
-              />
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              {{ form.email.label(class="text-sm font-medium text-[#17233A]") }}
+              {{ form.email( class="border border-[#6F829F] py-2 px-2
+              rounded-sm" ) }} {% for error in form.email.errors %}
+              <p class="text-xs text-red-600">{{ error }}</p>
+              {% endfor %}
             </div>
-
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-[#17233A]" for="rol">
-                Rol
-              </label>
-              <select
-                id="rol"
-                name="rol"
-                required
-                class="w-full border border-[#6F829F] py-2 px-3 rounded-sm text-[#17233A]"
-              >
-                <option value="">Seleccioná un rol</option>
-                <option value="administrador">Administrador</option>
-                <option value="usuario">Usuario</option>
-              </select>
-            </div>
-
-            <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-[#17233A]" for="password">
-                Contraseña
-              </label>
+              {{ form.password.label(class="text-sm font-medium
+              text-[#17233A]")}}
               <div class="relative">
-                <input
-                  id="password"
-                  class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
-                  type="password"
-                  name="password"
-                  required
-                />
+                {{ form.password( class="w-full border border-[#6F829F] py-2
+                px-2 rounded-sm" ) }}
                 <button
                   type="button"
                   onclick="mostrarPassword('password', 'icon-password')"
@@ -137,17 +96,11 @@
             </div>
 
             <div class="flex flex-col gap-1.5">
-              <label class="text-sm font-medium text-[#17233A]" for="confirmar">
-                Repetir contraseña
-              </label>
+              {{ form.confirmar.label(class="text-sm font-medium
+              text-[#17233A]")}}
               <div class="relative">
-                <input
-                  id="confirmar"
-                  class="w-full border border-[#6F829F] px-3 py-2 rounded-sm"
-                  type="password"
-                  name="confirmar"
-                  required
-                />
+                {{ form.confirmar( class="w-full border border-[#6F829F] py-2
+                px-2 rounded-sm" ) }}
                 <button
                   type="button"
                   onclick="mostrarPassword('confirmar', 'icon-confirmar')"
@@ -160,32 +113,26 @@
                   ></i>
                 </button>
               </div>
+              {% for error in form.confirmar.errors %}
+              <p class="text-xs text-red-600">{{ error }}</p>
+              {% endfor %}
             </div>
 
             <div
               class="flex items-start sm:items-center gap-2 col-span-1 md:col-span-2 mt-2"
             >
-              <input
-                type="checkbox"
-                id="condiciones"
-                name="condiciones"
-                required
-                class="w-4 h-4 mt-0.5 sm:mt-0 accent-[#123A7A] shrink-0"
-              />
-              <label for="condiciones" class="text-sm text-[#4B5B75]">
-                Acepto los términos de uso y el tratamiento de mis datos
-                personales.
-              </label>
+              {{ form.condiciones(class="w-4 h-4 mt-0.5 sm:mt-0 accent-[#123A7A]
+              shrink-0") }} {{ form.condiciones.label(class="text-sm
+              text-[#4B5B75]") }} {% for error in form.condiciones.errors %}
+              <p class="text-xs text-red-600">{{ error }}</p>
+              {% endfor %}
             </div>
           </div>
 
           <div class="flex justify-end mt-5 sm:mt-6">
-            <button
-              class="w-full sm:w-auto bg-[#123A7A] px-6 py-2 text-white text-base rounded-sm hover:bg-[#1B4F9C] transition-colors"
-              type="submit"
-            >
-              Enviar solicitud
-            </button>
+            {{ form.submit(class="w-full sm:w-auto bg-[#123A7A] px-6 py-2
+            text-white text-base rounded-sm hover:bg-[#1B4F9C]
+            transition-colors") }}
           </div>
         </form>
 

@@ -27,10 +27,12 @@ def register():
             db.session.commit()
         except exc.IntegrityError:
             db.session.rollback()
-            form.email.errors.append("Ese email ya esta registado")
+            form.email.errors.append("Email ya esta registado")
             #return render_template("auth/register.html", form=form), 409
-            return "Formulario inválido", 400
-        flash("Cuenta creada. Ya podes iniciar sesion.")
+
+            return render_template("auth/register.html", form=form), 400
+        
+        flash("Solicitud enviada. Un administrador la revisará.", "success")
         return redirect(url_for("index"))
    
     flash("Completa los campos que faltan.")
