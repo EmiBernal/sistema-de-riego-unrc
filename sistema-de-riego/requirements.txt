@@ -3,6 +3,7 @@ Flask==3.0.3
 
 # Servidor web
 Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.1.6
 psycopg2-binary==2.9.9
 GeoAlchemy2==0.15.2   # manejar tipos geográficos de PostGIS (poligonos)
 

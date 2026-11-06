@@ -11,4 +11,7 @@ def create_app():
     def index():
         return "Funciona"
 
+    from app.regadores import regadores_bp
+    app.register_blueprint(regadores_bp)
+
     return app

@@ -3,6 +3,9 @@ from datetime import date
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import ENUM
 
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey
+
 from .extensions import db, login_manager
 
 rol_usuario = ENUM(
@@ -31,3 +34,23 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
+
+class Regador(db.Model):
+    __tablename__ = "regador"
+
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuario.id"), primary_key=True, autoincrement=False)
+    dni: Mapped[str] = mapped_column(db.String(10), unique=True)
+    telefono: Mapped[str | None] = mapped_column(db.String(20))
+    carnet_conducir: Mapped[str | None] = mapped_column(db.String(255))
+    info_seguro: Mapped[str | None] = mapped_column(db.String(255))
+
+    usuario = db.relationship("User", backref=db.backref("regador", uselist=False))
+
+    def __str__(self):
+        return (
+            f"Usuario_id:{self.usuario_id},"
+            f"Dni:{self.dni},"
+            f"Telefono:{self.telefono},"
+            f"Carnet_conducir:{self.carnet_conducir},"
+            f"Info_seguro:{self.info_seguro}"
+        )
