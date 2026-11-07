@@ -1,7 +1,8 @@
 CREATE EXTENSION IF NOT EXISTS postgis;
 
-CREATE TYPE rol_usuario AS ENUM ('SUPERUSUARIO', 'REGADOR');
+CREATE TYPE rol_usuario AS ENUM ('ADMINISTRADOR', 'USUARIO');
 CREATE TYPE estado_recorrido AS ENUM ('LLUVIA', 'FERIADO', 'NORMAL');
+CREATE TYPE estado_solicitud AS ENUM ('PENDIENTE', 'APROBADO', 'RECHAZADO');
 
 CREATE TABLE vecinal (
     id SERIAL PRIMARY KEY,
@@ -16,9 +17,10 @@ CREATE TABLE usuario (
     fecha_alta DATE NOT NULL,
     nombre VARCHAR(255) NOT NULL,
     apellido VARCHAR(255) NOT NULL,
-    rol rol_usuario NOT NULL,
+    rol rol_usuario NOT NULL DEFAULT 'USUARIO',
     email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL
+    password_hash VARCHAR(255) NOT NULL,
+    estado estado_solicitud NOT NULL DEFAULT 'PENDIENTE'
 );
 
 CREATE TABLE camion (
