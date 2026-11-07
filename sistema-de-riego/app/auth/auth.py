@@ -1,6 +1,4 @@
-from urllib import request
-
-from flask import Blueprint, render_template, redirect, url_for, flash, session
+from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from flask_login import current_user, login_required, login_user, logout_user
 from ..extensions import db, limiter
 from ..models import User
@@ -17,27 +15,24 @@ def register():
 
     if form.validate_on_submit():
         user = User(
-            nombre = form.nombre.data,
-            apellido = form.apellido.data,
+            nombre=form.nombre.data,
+            apellido=form.apellido.data,
             email=form.email.data,
-            password_hash=security.generate_password_hash(form.password.data)
+            password_hash=security.generate_password_hash(form.password.data),
         )
         db.session.add(user)
         try:
             db.session.commit()
         except exc.IntegrityError:
             db.session.rollback()
-            form.email.errors.append("Email ya esta registado")
-            #return render_template("auth/register.html", form=form), 409
-
-            return render_template("auth/register.html", form=form), 400
+            form.email.errors.append("Email ya está registrado")
+            return render_template("auth/register.html", form=form), 400  
         
-        flash("Solicitud enviada. Un administrador la revisará.", "success")
+        flash("Solicitud enviada. Un administrador la revisará.", "success")  
         return redirect(url_for("index"))
-   
-    flash("Completa los campos que faltan.")
+
+
     return render_template("auth/register.html", form=form)
-    ##return "Formulario inválido", 400
          
 @auth_bp.route("/login", methods=["GET","POST"])
 @limiter.limit("5 per minute", methods=["POST"])
