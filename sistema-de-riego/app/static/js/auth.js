@@ -1,6 +1,3 @@
-/* Tranformamos en iconos con Lucide Iconos */
-lucide.createIcons();
-
 function mostrarPassword(inputId, iconId) {
   const password = document.getElementById(inputId);
   const icono = document.getElementById(iconId);
