@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, session, request
+from flask import Blueprint, render_template, redirect, url_for, flash, session
 from flask_login import current_user, login_required, login_user, logout_user
 from ..extensions import db, limiter
 from ..models import User
@@ -29,8 +29,7 @@ def register():
             return render_template("auth/register.html", form=form), 400  
         
         flash("Solicitud enviada. Un administrador la revisará.", "success")  
-        return redirect(url_for("index"))
-
+        return redirect(url_for("auth.login"))
 
     return render_template("auth/register.html", form=form)
          
@@ -47,9 +46,15 @@ def login():
         ## Busca el primer email registrado en la bases de datos.
         user = User.query.filter_by(email=email).first()
 
+
         # Si el usuario no existe o las contraseña
         if not user or not security.check_password_hash(user.password_hash, password):
             return "Email o contraseña incorrecta. Intente nuevamente.", 401
+
+        # si el usuario tiene como estado pendiente o rechazado
+        if user.estado in ("PENDIENTE", "RECHAZADO"):
+            flash("Su cuenta aún no está disponible.", "warning")
+            return render_template("login.html", form=form), 403
         
         session.permanent = True
         login_user(user, remember=False)
