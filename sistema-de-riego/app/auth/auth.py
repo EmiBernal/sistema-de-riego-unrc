@@ -55,19 +55,19 @@ def login():
 
         # si el usuario tiene como estado pendiente o rechazado
         if user.estado in ("PENDIENTE", "RECHAZADO"):
-            flash("Su cuenta aún no está disponible."), 403
-            return render_template("auth/login.html", form=form)
+            flash("Su cuenta aún no está disponible.", "error")
+            return render_template("auth/login.html", form=form), 403
         
         session.permanent = True
         login_user(user, remember=False)
-        return "Ok", 200
+        return redirect(url_for("main.index"))
     return render_template("auth/login.html", form=form)
 
 @auth_bp.route("/logout", methods=["POST"])
 @login_required
 def logout():
     logout_user()
-    return "Ok", 200
+    return redirect(url_for("auth.login"))
 
 @auth_bp.route("/me")
 @login_required
