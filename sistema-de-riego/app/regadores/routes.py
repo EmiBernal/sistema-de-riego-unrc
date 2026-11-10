@@ -15,17 +15,17 @@ def _datos_basicos(regador):
         "dni": regador.dni,
     }
 
-def superusuario_required(func):
+def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if not current_user.es_superusuario:
+        if not current_user.es_administrador:
             return "Acceso restringido", 403
         return func(*args, **kwargs)
     return wrapper
 
 @regadores_bp.route("/")
 @login_required
-@superusuario_required
+@admin_required
 def lista_regadores():
 
     regadores = Regador.query.all()
@@ -38,7 +38,7 @@ def lista_regadores():
 
 @regadores_bp.route("/buscar-regador/<int:usuario_id>")
 @login_required
-@superusuario_required
+@admin_required
 def buscar_regador(usuario_id):
     regador = db.get_or_404(Regador, usuario_id, description="Regador no encontrado")
 

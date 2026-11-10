@@ -27,7 +27,8 @@ def create_app(config_class=Config):
 
     with app.app_context():
         db.create_all()                # crea las tablas si no existen
-        crear_usuario_por_defecto()    # crea el usuario si no existe
+        if not app.config.get("TESTING"):
+            crear_usuario_por_defecto()    # crea el usuario si no existe
 
     from app.regadores import regadores_bp
     app.register_blueprint(regadores_bp)
