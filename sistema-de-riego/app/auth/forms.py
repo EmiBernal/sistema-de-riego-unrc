@@ -7,13 +7,12 @@ def _normalizar_email(valor):
     return valor.strip().lower() if valor else valor
 
 class LoginForm(FlaskForm):
-    email = EmailField("Email", validators=[DataRequired(), Email()], filters=[_normalizar_email])
+    email = EmailField("Correo electronico", validators=[DataRequired(), Email()], filters=[_normalizar_email])
     password = PasswordField("Contraseña", validators=[DataRequired()])
-    recordarme = BooleanField("Recordarme")
     submit = SubmitField("Ingresar")
 
 class RegisterForm(FlaskForm):
-    nombre = StringField("Nombre", validators=[DataRequired()])
+    nombre = StringField("Nombre", validators=[DataRequired(message="Este campo es requerido")])
     apellido = StringField("Apellido", validators=[DataRequired(message="Este campo es requerido")])
     email = EmailField("Correo electrónico", validators=[DataRequired(), Email(message="Ingresá un email válido", check_deliverability=True), Length(max=254)])
     password = PasswordField("Contraseña", validators=[DataRequired(), Length(min=8, max=64, message="Debe tener entre 8 y 64 caracteres")])
