@@ -49,17 +49,19 @@ def login():
 
         # Si el usuario no existe o las contraseña
         if not user or not security.check_password_hash(user.password_hash, password):
-            return "Email o contraseña incorrecta. Intente nuevamente.", 401
+            flash("Email o contraseña incorrecta. Intente nuevamente.", "error")
+
+            return render_template("auth/login.html", form=form)
 
         # si el usuario tiene como estado pendiente o rechazado
         if user.estado in ("PENDIENTE", "RECHAZADO"):
-            flash("Su cuenta aún no está disponible.", "warning")
-            return render_template("login.html", form=form), 403
+            flash("Su cuenta aún no está disponible."), 403
+            return render_template("auth/login.html", form=form)
         
         session.permanent = True
         login_user(user, remember=False)
         return "Ok", 200
-    return "Datos incompletos", 400
+    return render_template("auth/login.html", form=form)
 
 @auth_bp.route("/logout", methods=["POST"])
 @login_required
