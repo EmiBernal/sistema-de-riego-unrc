@@ -1,0 +1,124 @@
+{% extends "base_auth.html" %} {% block title %}Registro - Sistema de riego{%
+endblock %} {% block head %}
+<!--<script src="https://cdn.tailwindcss.com"></script> -->
+{% endblock %} {% block content %}
+<div
+  class="bg-[#EAF0F8] flex justify-center items-center px-4 py-6 sm:py-8 min-h-[70vh]"
+>
+  <section
+    class="w-full max-w-2xl bg-white p-5 sm:p-8 rounded-md border border-[#C3D1E6]"
+  >
+    <div class="mb-5 sm:mb-6">
+      <h1 class="text-xl sm:text-2xl text-[#123A7A] font-semibold">
+        Solicitud de acceso
+      </h1>
+      <p class="text-sm text-[#4B5B75] mt-2">
+        Los campos son obligatorios. Tu solicitud será revisada por un
+        administrador.
+      </p>
+    </div>
+
+    <form method="post" action="{{ url_for('auth.register') }}">
+      {{ form.hidden_tag() }}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+          {{ form.nombre.label(class="text-sm font-medium text-[#17233A]") }} {{
+          form.nombre(class="border border-[#6F829F] py-2 px-2 rounded-sm") }}
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          {{ form.apellido.label(class="text-sm font-medium text-[#17233A]") }}
+          {{ form.apellido(class="border border-[#6F829F] py-2 px-2 rounded-sm")
+          }}
+        </div>
+
+        <div class="flex flex-col gap-1.5 md:col-span-2">
+          {{ form.email.label(class="text-sm font-medium text-[#17233A]") }} {{
+          form.email(class="border border-[#6F829F] py-2 px-2 rounded-sm") }} {%
+          for error in form.email.errors %}
+          <p class="text-xs text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          {{ form.password.label(class="text-sm font-medium text-[#17233A]") }}
+          <div class="relative">
+            {{ form.password(class="w-full border border-[#6F829F] py-2 px-2
+            rounded-sm") }}
+            <button
+              type="button"
+              onclick="mostrarPassword('password', 'icon-password')"
+              class="absolute inset-y-0 right-3 flex items-center"
+            >
+              <i
+                id="icon-password"
+                data-lucide="eye"
+                class="w-5 h-5 text-[#17233A] opacity-60"
+              ></i>
+            </button>
+          </div>
+          <p class="text-xs mt-1 text-[#4B5B75]">
+            Mínimo 8 caracteres, con letras y números.
+          </p>
+          {% for error in form.password.errors %}
+          <p class="text-xs text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          {{ form.confirmar.label(class="text-sm font-medium text-[#17233A]") }}
+          <div class="relative">
+            {{ form.confirmar(class="w-full border border-[#6F829F] py-2 px-2
+            rounded-sm") }}
+            <button
+              type="button"
+              onclick="mostrarPassword('confirmar', 'icon-confirmar')"
+              class="absolute inset-y-0 right-3 flex items-center"
+            >
+              <i
+                id="icon-confirmar"
+                data-lucide="eye"
+                class="w-5 h-5 text-[#17233A] opacity-60"
+              ></i>
+            </button>
+          </div>
+          {% for error in form.confirmar.errors %}
+          <p class="text-xs text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div
+          class="flex items-start sm:items-center gap-2 col-span-1 md:col-span-2 mt-2"
+        >
+          {{ form.condiciones(class="w-4 h-4 mt-0.5 sm:mt-0 accent-[#123A7A]
+          shrink-0") }} {{ form.condiciones.label(class="text-sm
+          text-[#4B5B75]") }} {% for error in form.condiciones.errors %}
+          <p class="text-xs text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-5 sm:mt-6">
+        {{ form.submit(class="w-full sm:w-auto bg-[#123A7A] px-6 py-2 text-white
+        text-base rounded-sm hover:bg-[#1B4F9C] transition-colors") }}
+      </div>
+    </form>
+
+    <div class="flex justify-center">
+      <p class="mt-5 sm:mt-6 text-sm sm:text-[15px] text-[#4B5B75] text-center">
+        ¿Ya tenés cuenta?
+        <a
+          class="text-[#1B4F9C] hover:underline"
+          href="{{ url_for('auth.login') }}"
+        >
+          Iniciá sesión
+        </a>
+      </p>
+    </div>
+  </section>
+</div>
+{% endblock %} {% block scripts %}
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+{% endblock %}

@@ -3,7 +3,9 @@ from dotenv import load_dotenv
 from flask import Flask
 from config import Config
 from app.auth.auth import auth_bp
-from .extensions import  db, limiter, login_manager
+from app.main.routes import main_bp
+from .extensions import  db, login_manager
+from .seed import crear_usuario_por_defecto
 
 
 load_dotenv()
@@ -15,13 +17,17 @@ def create_app(config_class=Config):
     #Inicializar la base de datos
     db.init_app(app)
 
-    # Registrar ñas rutas de autenticacion
-    app.register_blueprint(auth_bp)
-
     login_manager.init_app(app)
-    @app.route("/")
-    def index():
-        return "Funciona"
+    login_manager.login_view = "auth.login"
+
+
+    # Registrar las rutas de autenticacion
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(main_bp)
+
+    with app.app_context():
+        db.create_all()                # crea las tablas si no existen
+        crear_usuario_por_defecto()    # crea el usuario si no existe
 
     from app.regadores import regadores_bp
     app.register_blueprint(regadores_bp)

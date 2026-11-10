@@ -9,11 +9,16 @@ from sqlalchemy import ForeignKey
 from .extensions import db, login_manager
 
 rol_usuario = ENUM(
-    "SUPERUSUARIO", "REGADOR",
+    "ADMINISTRADOR", "USUARIO",
     name="rol_usuario",
     create_type=False,  
 )
 
+estado_solicitud = ENUM(
+    "PENDIENTE", "APROBADO", "RECHAZADO",
+    name = "estado_solicitud",
+    create_type= False,
+)
 
 class User(UserMixin, db.Model):
     __tablename__ = "usuario"
@@ -22,13 +27,14 @@ class User(UserMixin, db.Model):
     fecha_alta = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     nombre = db.Column(db.String(255), nullable=False)
     apellido = db.Column(db.String(255), nullable=False)
-    rol = db.Column(rol_usuario, nullable=False, default="REGADOR")
+    rol = db.Column(rol_usuario, nullable=False, default="USUARIO")
     email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
+    estado = db.Column(estado_solicitud, nullable=False, default="PENDIENTE")
 
     @property
-    def es_superusuario(self):
-        return self.rol == "SUPERUSUARIO"
+    def es_administrador(self):
+        return self.rol == "ADMINISTRADOR"
 
 
 @login_manager.user_loader

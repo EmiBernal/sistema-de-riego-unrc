@@ -1,0 +1,60 @@
+{% extends "base_auth.html"%} {% block content %}
+
+<div
+  class="bg-[#EAF0F8] flex justify-center items-center px-4 py-6 sm:py-8 min-h-[70vh]"
+>
+  <section
+    class="w-full max-w-md bg-white p-5 sm:p-8 rounded-md border border-[#C3D1E6]"
+  >
+    <div class="mb-5 sm:mb-6">
+      <h1 class="text-xl sm:text-2xl text-[#123A7A] font-semibold">
+        Ingreso al sistema
+      </h1>
+      <p class="text-sm text-[#4B5B75] mt-2">
+        Acceso exclusivo para personal autorizado.
+      </p>
+    </div>
+    {% for field in (form.email, form.password) %} {% for error in field.errors
+    %}
+    <p class="text-sm text-red-600 mb-1">{{ error }}</p>
+    {% endfor %} {% endfor %}
+    <form method="post" action="{{url_for('auth.login')}}">
+      {{ form.hidden_tag() }}
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1.5">
+          {{ form.email.label(class="text-sm font-medium text-[#17233A]") }} {{
+          form.email(class="border border-[#6F829F] py-2 px-2 rounded-sm") }}
+        </div>
+        <div class="flex flex-col gap-1.5">
+          {{form.password.label(class="text-sm font-medium text-[#17233A]")}}
+          {{form.password(class="border border-[#6F829F] py-2 px-2
+          rounded-sm")}}
+        </div>
+
+        <p
+          class="flex justify-end text-xs font-medium text-[#1B4F9C] hover:text-[#17233A] underline"
+        >
+          <a href="">¿Olvidaste tu contraseña?</a>
+        </p>
+      </div>
+
+      <div class="flex justify-end mt-5 sm:mt-6">
+        {{ form.submit(class="w-full sm:w-auto bg-[#123A7A] px-6 py-2 text-white
+        text-base rounded-sm hover:bg-[#1B4F9C] transition-colors") }}
+      </div>
+    </form>
+    <div
+      class="border-t border-[#D5DFEE] mt-4 pt-4 sm:pt-[18px] text-center text-[15px] text-[#17233A]"
+    >
+      <p class="text-sm text-[#17233A]">
+        ¿Todavía no tenés cuenta?
+        <a
+          class="font-semibold text-[#1B4F9C] hover:text-[#123A7A] underline"
+          href="{{url_for('auth.register')}}"
+          >Solcitar acceso</a
+        >
+      </p>
+    </div>
+  </section>
+</div>
+{% endblock %}

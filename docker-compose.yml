@@ -25,5 +25,11 @@ services:
       db:
         condition: service_healthy
 
+  tailwind:
+    build: ./sistema-de-riego
+    volumes:
+      - ./sistema-de-riego:/app
+    command: tailwindcss -i app/static/src/input.css -o app/static/css/output.css --watch=always
+
 volumes:
   sistema_riego_data:
