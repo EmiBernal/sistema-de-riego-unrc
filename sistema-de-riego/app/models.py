@@ -27,7 +27,7 @@ class User(UserMixin, db.Model):
     rol = db.Column(rol_usuario, nullable=False, default="USUARIO")
     email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
-    estado_solicitud = db.Colum(estado_solicitud, nulleable=False, default="PENDIENTE")
+    estado = db.Column(estado_solicitud, nullable=False, default="PENDIENTE")
 
     @property
     def es_administrador(self):

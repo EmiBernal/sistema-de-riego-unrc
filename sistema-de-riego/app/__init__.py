@@ -15,7 +15,8 @@ def create_app(config_class=Config):
     #Inicializar la base de datos
     db.init_app(app)
 
-    # Registrar ñas rutas de autenticacion
+
+    # Registrar las rutas de autenticacion
     app.register_blueprint(auth_bp)
 
     login_manager.init_app(app)
