@@ -17,3 +17,6 @@ __pycache__/
 
 ## claves 
 .env
+
+##CSS tailwindcss
+output.css

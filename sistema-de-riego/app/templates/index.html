@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sistema de Riego</title>
+  </head>
+  <body>
+    <h1 class="font-semibold">
+      Bienvenido al Sistema de Gestion de Riego
+      <span class="text-[#17233A]">{{usuario.nombre}}</span>
+    </h1>
+    <p class="pt-2">
+      Vamos a ver los recorridos de hoy {{ fecha.strftime("%d/%m/%Y") }}
+    </p>
+    <form action="{{ url_for('auth.logout') }}" method="POST">
+      <button type="submit">Cerrar sesión</button>
+    </form>
+  </body>
+</html>

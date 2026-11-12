@@ -16,3 +16,12 @@ Flask-WTF
 Flask-Limiter
 argon2-cffi
 email-validator
+
+# Testing
+pytest
+
+# Variables de entorno
+python-dotenv
+
+# CSS
+pytailwindcss
