@@ -1,0 +1,48 @@
+{% extends "base_auth.html" %}
+{% block title %}Editar Vecinal - Gestión de Riego{% endblock %}
+
+{% block content %}
+<div class="bg-[#EAF0F8] flex justify-center items-center px-4 py-6 sm:py-8 min-h-[75vh]">
+  <section class="w-full max-w-xl bg-white p-5 sm:p-8 rounded-md border border-[#C3D1E6]">
+    <div class="mb-5 sm:mb-6">
+      <h1 class="text-xl sm:text-2xl text-[#123A7A] font-semibold">
+        Editar vecinal
+      </h1>
+      <p class="text-sm text-[#4B5B75] mt-2">
+        Actualizá los datos de {{ vecinal.nombre }}.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('vecinales.editar', vecinal_id=vecinal.id) }}">
+      {{ form.hidden_tag() }}
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1.5">
+          {{ form.nombre.label(class="text-sm font-medium text-[#17233A]") }}
+          {{ form.nombre(class="border border-[#6F829F] py-2 px-2 rounded-sm") }}
+          {% for error in form.nombre.errors %}
+            <p class="text-xs text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          {{ form.km.label(class="text-sm font-medium text-[#17233A]") }}
+          {{ form.km(class="border border-[#6F829F] py-2 px-2 rounded-sm") }}
+          {% for error in form.km.errors %}
+            <p class="text-xs text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 mt-6">
+        <a
+          href="{{ url_for('vecinales.index') }}"
+          class="text-sm text-[#4B5B75] hover:text-[#17233A] px-3 py-2"
+        >
+          Cancelar
+        </a>
+        {{ form.submit(class="bg-[#123A7A] px-6 py-2 text-white text-sm rounded-sm hover:bg-[#1B4F9C] transition-colors cursor-pointer") }}
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}
