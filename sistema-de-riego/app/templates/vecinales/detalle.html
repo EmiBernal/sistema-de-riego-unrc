@@ -18,7 +18,7 @@
           {{ vecinal.nombre }}
         </h1>
         <p class="text-sm text-[#4B5B75] mt-1">
-          {{ vecinal.km }} km de calles · {{ vertices | length }} vértices importados desde VSAT
+          {{ vecinal.km }} km de calles · Geocerca importada desde VSAT
         </p>
       </div>
 
@@ -38,41 +38,11 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2">
-        <div
-          id="mapa-vecinal"
-          data-geojson='{{ geojson }}'
-          class="w-full h-96 rounded-sm border border-[#C3D1E6]"
-        ></div>
-      </div>
-
-      <div class="border border-[#C3D1E6] rounded-sm p-4">
-        <h2 class="text-sm font-semibold text-[#123A7A] mb-3">
-          Coordenadas (Longitud, Latitud)
-        </h2>
-        <div class="max-h-80 overflow-y-auto border border-[#D5DFEE] rounded-sm text-xs">
-          <table class="w-full text-left">
-            <thead class="bg-[#EAF0F8] text-[#123A7A] sticky top-0">
-              <tr>
-                <th class="py-1.5 px-2">#</th>
-                <th class="py-1.5 px-2">Longitud</th>
-                <th class="py-1.5 px-2">Latitud</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-[#D5DFEE]">
-              {% for lon, lat in vertices %}
-                <tr>
-                  <td class="py-1 px-2 text-[#4B5B75]">{{ loop.index }}</td>
-                  <td class="py-1 px-2 font-mono">{{ "%.6f"|format(lon) }}</td>
-                  <td class="py-1 px-2 font-mono">{{ "%.6f"|format(lat) }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <div
+      id="mapa-vecinal"
+      data-geojson='{{ geojson }}'
+      class="w-full h-[28rem] rounded-sm border border-[#C3D1E6]"
+    ></div>
   </section>
 </div>
 {% endblock %}
