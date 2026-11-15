@@ -1,0 +1,83 @@
+{% extends "base_auth.html" %}
+{% block title %}{{ vecinal.nombre }} - Gestión de Riego{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+{% endblock %}
+
+{% block content %}
+<div class="bg-[#EAF0F8] px-4 sm:px-8 py-6 sm:py-8 min-h-[75vh]">
+  <section class="max-w-5xl mx-auto bg-white p-5 sm:p-8 rounded-md border border-[#C3D1E6]">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-xl sm:text-2xl text-[#123A7A] font-semibold">
+          {{ vecinal.nombre }}
+        </h1>
+        <p class="text-sm text-[#4B5B75] mt-1">
+          {{ vecinal.km }} km de calles · {{ vertices | length }} vértices importados desde VSAT
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a
+          href="{{ url_for('vecinales.editar', vecinal_id=vecinal.id) }}"
+          class="px-4 py-2 text-sm border border-[#6F829F] text-[#17233A] rounded-sm hover:bg-slate-50"
+        >
+          Editar
+        </a>
+        <a
+          href="{{ url_for('vecinales.index') }}"
+          class="px-4 py-2 text-sm bg-[#123A7A] hover:bg-[#1B4F9C] text-white rounded-sm"
+        >
+          Volver
+        </a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2">
+        <div
+          id="mapa-vecinal"
+          data-geojson='{{ geojson }}'
+          class="w-full h-96 rounded-sm border border-[#C3D1E6]"
+        ></div>
+      </div>
+
+      <div class="border border-[#C3D1E6] rounded-sm p-4">
+        <h2 class="text-sm font-semibold text-[#123A7A] mb-3">
+          Coordenadas (Longitud, Latitud)
+        </h2>
+        <div class="max-h-80 overflow-y-auto border border-[#D5DFEE] rounded-sm text-xs">
+          <table class="w-full text-left">
+            <thead class="bg-[#EAF0F8] text-[#123A7A] sticky top-0">
+              <tr>
+                <th class="py-1.5 px-2">#</th>
+                <th class="py-1.5 px-2">Longitud</th>
+                <th class="py-1.5 px-2">Latitud</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#D5DFEE]">
+              {% for lon, lat in vertices %}
+                <tr>
+                  <td class="py-1 px-2 text-[#4B5B75]">{{ loop.index }}</td>
+                  <td class="py-1 px-2 font-mono">{{ "%.6f"|format(lon) }}</td>
+                  <td class="py-1 px-2 font-mono">{{ "%.6f"|format(lat) }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/vecinales.js') }}"></script>
+{% endblock %}
