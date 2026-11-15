@@ -1,0 +1,95 @@
+{% extends "base_auth.html" %}
+{% block title %}Vecinales - Gestión de Riego{% endblock %}
+
+{% block content %}
+<div class="bg-[#EAF0F8] px-4 sm:px-8 py-6 sm:py-8 min-h-[75vh]">
+  <section class="max-w-5xl mx-auto bg-white p-5 sm:p-8 rounded-md border border-[#C3D1E6]">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-xl sm:text-2xl text-[#123A7A] font-semibold">
+          Vecinales
+        </h1>
+        <p class="text-sm text-[#4B5B75] mt-1">
+          Zonas y barrios importados desde VSAT.
+        </p>
+      </div>
+
+      <a
+        href="{{ url_for('vecinales.crear') }}"
+        class="inline-flex items-center justify-center gap-2 bg-[#123A7A] hover:bg-[#1B4F9C] text-white text-sm font-medium px-4 py-2 rounded-sm transition-colors"
+      >
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        Nueva vecinal
+      </a>
+    </div>
+
+    {% if vecinales %}
+      <div class="overflow-x-auto border border-[#C3D1E6] rounded-sm">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead class="bg-[#EAF0F8] text-[#123A7A] border-b border-[#C3D1E6]">
+            <tr>
+              <th class="py-3 px-4 font-semibold">ID</th>
+              <th class="py-3 px-4 font-semibold">Nombre</th>
+              <th class="py-3 px-4 font-semibold">Kilómetros</th>
+              <th class="py-3 px-4 font-semibold text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#D5DFEE]">
+            {% for v in vecinales %}
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 text-[#4B5B75]">{{ v.id }}</td>
+                <td class="py-3 px-4 font-medium text-[#17233A]">{{ v.nombre }}</td>
+                <td class="py-3 px-4 text-[#4B5B75]">{{ v.km }} km</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center justify-end gap-3">
+                    <a
+                      href="{{ url_for('vecinales.detalle', vecinal_id=v.id) }}"
+                      class="inline-flex items-center gap-1 text-[#1B4F9C] hover:text-[#123A7A] font-medium"
+                    >
+                      <i data-lucide="map-pin" class="w-4 h-4"></i>
+                      Ver
+                    </a>
+                    <a
+                      href="{{ url_for('vecinales.editar', vecinal_id=v.id) }}"
+                      class="inline-flex items-center gap-1 text-[#4B5B75] hover:text-[#17233A] font-medium"
+                    >
+                      <i data-lucide="pencil" class="w-4 h-4"></i>
+                      Editar
+                    </a>
+                    <form
+                      action="{{ url_for('vecinales.eliminar', vecinal_id=v.id) }}"
+                      method="POST"
+                      class="inline"
+                      onsubmit="return confirm('¿Eliminar la vecinal {{ v.nombre }}?');"
+                    >
+                      <button
+                        type="submit"
+                        class="inline-flex items-center gap-1 text-red-600 hover:text-red-800 font-medium cursor-pointer"
+                      >
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        Eliminar
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="text-center py-10 border border-dashed border-[#C3D1E6] rounded-sm">
+        <p class="text-[#4B5B75] text-sm">
+          No hay vecinales registradas todavía.
+        </p>
+        <a
+          href="{{ url_for('vecinales.crear') }}"
+          class="inline-block mt-3 text-sm font-semibold text-[#1B4F9C] hover:underline"
+        >
+          Importar vecinal desde VSAT
+        </a>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
