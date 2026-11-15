@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 
 from flask_login import UserMixin
+from geoalchemy2 import Geometry
 from sqlalchemy.dialects.postgresql import ENUM
 
 from .extensions import db, login_manager
@@ -37,3 +38,11 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
+
+class Vecinal(db.Model):
+    __tablename__ = "vecinal"
+
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(255), nullable=False)
+    km = db.Column(db.Integer, nullable=False)
+    polinomio = db.Column(Geometry(geometry_type="POLYGON", srid=4326), nullable=False)
