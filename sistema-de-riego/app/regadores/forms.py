@@ -13,3 +13,11 @@ class RegadorForm(FlaskForm):
     telefono = StringField("Teléfono", validators=[Optional(), Length(max=20)])
     carnet_conducir = StringField("Carnet de conducir", validators=[Optional(), Length(max=255)])
     info_seguro = StringField("Información del seguro", validators=[Optional(), Length(max=255)])
+
+class EditarRegadorForm(FlaskForm):
+    nombre = StringField("Nombre", validators=[Optional()])
+    apellido = StringField("Apellido", validators=[Optional()])
+    dni = StringField("DNI", validators=[Optional(), Length(max=10), Regexp(r"^\d+$", message="El DNI solo puede tener números")])
+    telefono = StringField("Teléfono", validators=[Optional(), Length(max=20)])
+    carnet_conducir = StringField("Carnet de conducir", validators=[Optional(), Length(max=255)])
+    info_seguro = StringField("Información del seguro", validators=[Optional(), Length(max=255)])

@@ -7,7 +7,7 @@ from werkzeug import security
 from ..extensions import db
 from ..models import Regador, User
 from . import regadores_bp
-from .forms import RegadorForm
+from .forms import RegadorForm, EditarRegadorForm
 
 
 def _datos_basicos(regador):
@@ -17,6 +17,13 @@ def _datos_basicos(regador):
         "apellido": regador.usuario.apellido,
         "dni": regador.dni,
     }
+
+def _datos_completos(regador):
+    datos = _datos_basicos(regador)
+    datos["telefono"] = regador.telefono
+    datos["carnet_conducir"] = regador.carnet_conducir
+    datos["info_seguro"] = regador.info_seguro
+    return datos
 
 def admin_required(func):
     @wraps(func)
@@ -45,11 +52,7 @@ def lista_regadores():
 def buscar_regador(usuario_id):
     regador = db.get_or_404(Regador, usuario_id, description="Regador no encontrado")
 
-    datos = _datos_basicos(regador)
-    datos["telefono"] = regador.telefono
-    datos["carnet_conducir"] = regador.carnet_conducir
-    datos["info_seguro"] = regador.info_seguro
-    return datos
+    return _datos_completos(regador)
 
 @regadores_bp.route("/crear-regador", methods=["POST"])
 @login_required
@@ -83,3 +86,32 @@ def crear_regador():
         return "Ya existe un usuario con ese email o DNI", 409
 
     return _datos_basicos(regador), 201
+
+@regadores_bp.route("/editar-regador/<int:usuario_id>", methods=["POST"])
+@login_required
+@admin_required
+def editar_regador(usuario_id):
+    regador = db.get_or_404(Regador, usuario_id, description="Regador no encontrado")
+
+    form = EditarRegadorForm()
+
+    if not form.validate_on_submit():
+        return form.errors, 400
+
+    campos_por_objeto = (
+        (regador.usuario, ("nombre", "apellido")),
+        (regador, ("dni", "telefono", "carnet_conducir", "info_seguro")),
+    )
+    for objeto, campos in campos_por_objeto:
+        for campo in campos:
+            nuevo_valor = getattr(form, campo).data
+            if nuevo_valor:
+                setattr(objeto, campo, nuevo_valor)
+
+    try:
+        db.session.commit()
+    except exc.IntegrityError:
+        db.session.rollback()
+        return "Ya existe un regador con ese DNI", 409
+
+    return _datos_completos(regador)
