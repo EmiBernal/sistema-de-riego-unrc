@@ -36,6 +36,11 @@ class User(UserMixin, db.Model):
     def es_administrador(self):
         return self.rol == "ADMINISTRADOR"
 
+    @property
+    def is_active(self):
+        # Flask-Login no deja iniciar sesión a un regador dado de baja
+        return self.regador is None or self.regador.activo
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -49,6 +54,7 @@ class Regador(db.Model):
     telefono: Mapped[str | None] = mapped_column(db.String(20))
     carnet_conducir: Mapped[str | None] = mapped_column(db.String(255))
     info_seguro: Mapped[str | None] = mapped_column(db.String(255))
+    activo: Mapped[bool] = mapped_column(default=True)
 
     usuario = db.relationship("User", backref=db.backref("regador", uselist=False))
 
@@ -58,5 +64,6 @@ class Regador(db.Model):
             f"Dni:{self.dni},"
             f"Telefono:{self.telefono},"
             f"Carnet_conducir:{self.carnet_conducir},"
-            f"Info_seguro:{self.info_seguro}"
+            f"Info_seguro:{self.info_seguro},"
+            f"Activo:{self.activo}"
         )
