@@ -23,6 +23,7 @@ def _datos_completos(regador):
     datos["telefono"] = regador.telefono
     datos["carnet_conducir"] = regador.carnet_conducir
     datos["info_seguro"] = regador.info_seguro
+    datos["activo"] = regador.activo
     return datos
 
 def admin_required(func):
@@ -38,7 +39,7 @@ def admin_required(func):
 @admin_required
 def lista_regadores():
 
-    regadores = Regador.query.all()
+    regadores = Regador.query.filter_by(activo=True).all()
     lista = []
     for regador in regadores:
         lista.append(_datos_basicos(regador))
@@ -122,12 +123,19 @@ def editar_regador(usuario_id):
 def eliminar_regador(usuario_id):
     regador = db.get_or_404(Regador, usuario_id, description="Regador no encontrado")
 
-    db.session.delete(regador)
-    db.session.delete(regador.usuario)
-    try:
-        db.session.commit()
-    except exc.IntegrityError:
-        db.session.rollback()
-        return "No se puede eliminar: el regador tiene registros asociados", 409
+    regador.activo = False
+    db.session.commit()
 
     return "", 204
+
+@regadores_bp.route("/activar-regador/<int:usuario_id>", methods=["POST"])
+@login_required
+@admin_required
+def activar_regador(usuario_id):
+    regador = db.get_or_404(Regador, usuario_id, description="Regador no encontrado")
+
+    regador.activo = True 
+    db.session.commit()
+
+    return "", 204
+
