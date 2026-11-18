@@ -49,6 +49,7 @@ CREATE TABLE regador (
     telefono        VARCHAR(20),
     carnet_conducir VARCHAR(255),
     info_seguro     VARCHAR(255),
+    activo          BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
