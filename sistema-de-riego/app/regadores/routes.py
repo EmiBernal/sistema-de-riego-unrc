@@ -115,3 +115,19 @@ def editar_regador(usuario_id):
         return "Ya existe un regador con ese DNI", 409
 
     return _datos_completos(regador)
+
+@regadores_bp.route("/eliminar-regador/<int:usuario_id>", methods=["POST"])
+@login_required
+@admin_required
+def eliminar_regador(usuario_id):
+    regador = db.get_or_404(Regador, usuario_id, description="Regador no encontrado")
+
+    db.session.delete(regador)
+    db.session.delete(regador.usuario)
+    try:
+        db.session.commit()
+    except exc.IntegrityError:
+        db.session.rollback()
+        return "No se puede eliminar: el regador tiene registros asociados", 409
+
+    return "", 204
