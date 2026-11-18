@@ -11,7 +11,7 @@ class RegadorForm(FlaskForm):
     password = PasswordField("Contraseña", validators=[DataRequired(), Length(min=8, max=64, message="Debe tener entre 8 y 64 caracteres")])
     dni = StringField("DNI", validators=[DataRequired(), Length(max=10), Regexp(r"^\d+$", message="El DNI solo puede tener números")])
     telefono = StringField("Teléfono", validators=[Optional(), Length(max=20)])
-    carnet_conducir = StringField("Carnet de conducir", validators=[Optional(), Length(max=255)])
+    carnet_conducir = StringField("Carnet de conducir", validators=[Optional(), Length(max=10), Regexp(r"^\d+$", message="El carnet de conducir solo puede tener números")])
     info_seguro = StringField("Información del seguro", validators=[Optional(), Length(max=255)])
 
 class EditarRegadorForm(FlaskForm):
@@ -19,5 +19,5 @@ class EditarRegadorForm(FlaskForm):
     apellido = StringField("Apellido", validators=[Optional()])
     dni = StringField("DNI", validators=[Optional(), Length(max=10), Regexp(r"^\d+$", message="El DNI solo puede tener números")])
     telefono = StringField("Teléfono", validators=[Optional(), Length(max=20)])
-    carnet_conducir = StringField("Carnet de conducir", validators=[Optional(), Length(max=255)])
+    carnet_conducir = StringField("Carnet de conducir", validators=[Optional(), Length(max=10), Regexp(r"^\d+$", message="El carnet de conducir solo puede tener números")])
     info_seguro = StringField("Información del seguro", validators=[Optional(), Length(max=255)])
