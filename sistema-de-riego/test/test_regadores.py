@@ -380,8 +380,10 @@ def test_eliminar_regador_como_administrador(client, usuario_administrador):
 
     assert response.status_code == 204
 
-    assert db.session.get(Regador, id_regador) is None
-    assert db.session.get(User, id_regador) is None 
+    regador = db.session.get(Regador, id_regador)
+
+    assert regador is not None #Es baja logica, el regador sigue en la base
+    assert regador.activo is False
 
 def test_eliminar_regador_inexistente(client, usuario_administrador):
     response = client.post("/auth/login", data={
@@ -391,3 +393,198 @@ def test_eliminar_regador_inexistente(client, usuario_administrador):
 
     response = client.post("/regadores/eliminar-regador/9999")
     assert response.status_code == 404
+
+def test_listar_regadores_no_muestra_dados_de_baja(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.post('/regadores/crear-regador', data={
+        "nombre": "Juan",
+        "apellido": "Perez",
+        "email": "juan@gmail.com",
+        "password": "Clave123!",
+        "dni": "12345678"
+    })
+
+    assert response.status_code == 201
+
+    id_regador = response.get_json()["id"]
+    response = client.post(f"/regadores/eliminar-regador/{id_regador}")
+
+    assert response.status_code == 204
+
+    response = client.get("/regadores/")
+
+    assert response.status_code == 200
+    assert response.get_json() == []
+
+def test_login_regador_dado_de_baja(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.post('/regadores/crear-regador', data={
+        "nombre": "Juan",
+        "apellido": "Perez",
+        "email": "juan@gmail.com",
+        "password": "Clave123!",
+        "dni": "12345678"
+    })
+
+    assert response.status_code == 201
+
+    id_regador = response.get_json()["id"]
+    response = client.post(f"/regadores/eliminar-regador/{id_regador}")
+
+    assert response.status_code == 204
+
+    response = client.post("/auth/logout")
+    response = client.post("/auth/login", data={
+        "email": "juan@gmail.com",
+        "password": "Clave123!"
+    })
+
+    response = client.get("/auth/me")
+
+    assert response.status_code == 401 #El regador dado de baja no quedo logueado
+
+def test_crear_regador_carnet_letras(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.post('/regadores/crear-regador', data={
+        "nombre": "Juan",
+        "apellido": "Perez",
+        "email": "juan@gmail.com",
+        "password": "Clave123!",
+        "dni": "12345678",
+        "carnet_conducir": "AB12345"
+    })
+
+    assert response.status_code == 400
+
+    assert "carnet_conducir" in response.get_json()
+
+def test_editar_regador_carnet_letras(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.post('/regadores/crear-regador', data={
+        "nombre": "Juan",
+        "apellido": "Perez",
+        "email": "juan@gmail.com",
+        "password": "Clave123!",
+        "dni": "12345678"
+    })
+
+    assert response.status_code == 201
+
+    id_regador = response.get_json()["id"]
+    response = client.post(f"/regadores/editar-regador/{id_regador}", data={
+        "carnet_conducir": "AB12345"
+    })
+
+    assert response.status_code == 400
+
+    assert "carnet_conducir" in response.get_json()
+
+def test_activar_regador_sin_login(client):
+    response = client.post("/regadores/activar-regador/1")
+    assert response.status_code == 401
+    assert response.get_data(as_text=True) == "No autorizado"
+
+def test_activar_regador_como_usuario(client, usuario_regador):
+    response = client.post("/auth/login", data={
+        "email": "test@gmail.com",
+        "password": "Clave123!"
+    })
+    response = client.post("/regadores/activar-regador/1")
+    assert response.status_code == 403
+    assert response.get_data(as_text=True) == "Acceso restringido"
+
+def test_activar_regador_como_administrador(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.post('/regadores/crear-regador', data={
+        "nombre": "Juan",
+        "apellido": "Perez",
+        "email": "juan@gmail.com",
+        "password": "Clave123!",
+        "dni": "12345678"
+    })
+
+    assert response.status_code == 201
+
+    id_regador = response.get_json()["id"]
+    response = client.post(f"/regadores/eliminar-regador/{id_regador}")
+
+    assert response.status_code == 204
+
+    response = client.post(f"/regadores/activar-regador/{id_regador}")
+
+    assert response.status_code == 204
+
+    regador = db.session.get(Regador, id_regador)
+
+    assert regador.activo is True
+
+    response = client.get("/regadores/")
+
+    assert response.status_code == 200
+    assert len(response.get_json()) == 1 #Vuelve a aparecer en el listado
+    assert response.get_json()[0]["id"] == id_regador
+
+def test_activar_regador_inexistente(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.post("/regadores/activar-regador/9999")
+    assert response.status_code == 404
+
+def test_login_regador_reactivado(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.post('/regadores/crear-regador', data={
+        "nombre": "Juan",
+        "apellido": "Perez",
+        "email": "juan@gmail.com",
+        "password": "Clave123!",
+        "dni": "12345678"
+    })
+
+    assert response.status_code == 201
+
+    id_regador = response.get_json()["id"]
+    response = client.post(f"/regadores/eliminar-regador/{id_regador}")
+
+    assert response.status_code == 204
+
+    response = client.post(f"/regadores/activar-regador/{id_regador}")
+
+    assert response.status_code == 204
+
+    response = client.post("/auth/logout")
+    response = client.post("/auth/login", data={
+        "email": "juan@gmail.com",
+        "password": "Clave123!"
+    })
+
+    response = client.get("/auth/me")
+
+    assert response.status_code == 200 #El regador reactivado puede volver a loguearse
+    assert response.get_json()["email"] == "juan@gmail.com"
