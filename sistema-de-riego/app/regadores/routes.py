@@ -1,4 +1,5 @@
 from functools import wraps
+from flask import render_template, redirect, url_for, flash
 
 from flask_login import login_required, current_user
 from sqlalchemy import exc
@@ -38,13 +39,8 @@ def admin_required(func):
 @login_required
 @admin_required
 def lista_regadores():
-
     regadores = Regador.query.filter_by(activo=True).all()
-    lista = []
-    for regador in regadores:
-        lista.append(_datos_basicos(regador))
-    
-    return lista
+    return render_template("regadores/index.html", regadores=regadores)
 
 
 @regadores_bp.route("/buscar-regador/<int:usuario_id>")
@@ -55,38 +51,39 @@ def buscar_regador(usuario_id):
 
     return _datos_completos(regador)
 
-@regadores_bp.route("/crear-regador", methods=["POST"])
+@regadores_bp.route("/crear-regador", methods=["GET", "POST"])
 @login_required
 @admin_required
 def crear_regador():
     form = RegadorForm()
 
-    if not form.validate_on_submit():
-        return form.errors, 400
+    if form.validate_on_submit():
+        usuario = User(
+            nombre=form.nombre.data,
+            apellido=form.apellido.data,
+            email=form.email.data,
+            password_hash=security.generate_password_hash(form.password.data),
+            rol="USUARIO",
+            estado="APROBADO",
+        )
+        regador = Regador(
+            usuario=usuario,
+            dni=form.dni.data,
+            telefono=form.telefono.data,
+            carnet_conducir=form.carnet_conducir.data,
+            info_seguro=form.info_seguro.data,
+        )
+        db.session.add(regador)
+        try:
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash("Ya existe un usuario con ese email o DNI.", "error")
+        else:
+            flash("Regador creado correctamente.", "success")
+            return redirect(url_for("regadores.lista_regadores"))
 
-    usuario = User(
-        nombre=form.nombre.data,
-        apellido=form.apellido.data,
-        email=form.email.data,
-        password_hash=security.generate_password_hash(form.password.data),
-        rol="USUARIO",
-        estado="APROBADO",
-    )
-    regador = Regador(
-        usuario=usuario,
-        dni=form.dni.data,
-        telefono=form.telefono.data,
-        carnet_conducir=form.carnet_conducir.data,
-        info_seguro=form.info_seguro.data,
-    )
-    db.session.add(regador)
-    try:
-        db.session.commit()
-    except exc.IntegrityError:
-        db.session.rollback()
-        return "Ya existe un usuario con ese email o DNI", 409
-
-    return _datos_basicos(regador), 201
+    return render_template("regadores/crear.html", form=form)
 
 @regadores_bp.route("/editar-regador/<int:usuario_id>", methods=["POST"])
 @login_required
