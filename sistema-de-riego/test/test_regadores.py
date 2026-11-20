@@ -77,6 +77,17 @@ def test_crear_regador_como_usuario(client, usuario_regador):
     assert response.status_code == 403
     assert response.get_data(as_text=True) == "Acceso restringido"
 
+def test_crear_regador_formulario(client, usuario_administrador):
+    response = client.post("/auth/login", data={
+        "email": "administrador@example.com",
+        "password": "1234"
+    })
+
+    response = client.get("/regadores/crear-regador")
+
+    assert response.status_code == 200
+    assert "Nuevo regador" in response.get_data(as_text=True)
+
 def test_crear_regador_como_administrador(client, usuario_administrador):
     response = client.post("/auth/login", data={
             "email": "administrador@example.com",
@@ -92,10 +103,9 @@ def test_crear_regador_como_administrador(client, usuario_administrador):
         "telefono": "1234567890"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    datos = response.get_json()
-    regador = db.session.get(Regador, datos["id"])
+    regador = Regador.query.filter_by(dni="12345678").first()
 
     assert regador is not None
     assert regador.usuario.nombre == "Juan"
@@ -119,7 +129,7 @@ def test_crear_regador_dni_repetido(client, usuario_administrador):
            "telefono": "1234567890"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
     response = client.post('/regadores/crear-regador', data={
                "nombre": "Pepe",
@@ -130,7 +140,9 @@ def test_crear_regador_dni_repetido(client, usuario_administrador):
                "telefono": "48394792834"
     })
 
-    assert response.status_code == 409
+    assert response.status_code == 200
+    assert "Ya existe un usuario con ese email o DNI." in response.get_data(as_text=True)
+    assert Regador.query.count() == 1
 
 def test_crear_regador_email_repetido(client, usuario_administrador):
     response = client.post("/auth/login", data={
@@ -147,7 +159,7 @@ def test_crear_regador_email_repetido(client, usuario_administrador):
            "telefono": "1234567890"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
     response = client.post('/regadores/crear-regador', data={
                "nombre": "Pepe",
@@ -158,7 +170,9 @@ def test_crear_regador_email_repetido(client, usuario_administrador):
                "telefono": "48394792834"
     })
 
-    assert response.status_code == 409
+    assert response.status_code == 200
+    assert "Ya existe un usuario con ese email o DNI." in response.get_data(as_text=True)
+    assert Regador.query.count() == 1
 
 def test_crear_regador_dni_letras(client, usuario_administrador):
     response = client.post("/auth/login", data={
@@ -175,9 +189,10 @@ def test_crear_regador_dni_letras(client, usuario_administrador):
         "telefono": "1234567890"
     })
 
-    assert response.status_code == 400
+    assert response.status_code == 200
 
-    assert "dni" in response.get_json()
+    assert "El DNI solo puede tener números" in response.get_data(as_text=True)
+    assert Regador.query.count() == 0
 
 def test_buscar_regador_sin_login(client):
     response = client.get("/regadores/buscar-regador/1")
@@ -208,9 +223,9 @@ def test_buscar_regador_como_administrador(client, usuario_administrador):
         "telefono": "1234567890"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.get(f"/regadores/buscar-regador/{id_regador}")
 
     assert response.status_code == 200
@@ -258,9 +273,9 @@ def test_editar_regador_como_administrador(client, usuario_administrador):
         "info_seguro": "Seguro X"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/editar-regador/{id_regador}", data={
         "nombre": "Pedro",
         "telefono": "1234567890"
@@ -301,9 +316,9 @@ def test_editar_regador_dni_letras(client, usuario_administrador):
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/editar-regador/{id_regador}", data={
         "dni": "234kd53d"
     })
@@ -326,7 +341,7 @@ def test_editar_regador_dni_repetido(client, usuario_administrador):
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
     response = client.post('/regadores/crear-regador', data={
         "nombre": "Pepe",
@@ -336,9 +351,9 @@ def test_editar_regador_dni_repetido(client, usuario_administrador):
         "dni": "4893084"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="4893084").first().usuario_id
     response = client.post(f"/regadores/editar-regador/{id_regador}", data={
         "dni": "12345678"
     })
@@ -373,9 +388,9 @@ def test_eliminar_regador_como_administrador(client, usuario_administrador):
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/eliminar-regador/{id_regador}")
 
     assert response.status_code == 204
@@ -408,9 +423,9 @@ def test_listar_regadores_no_muestra_dados_de_baja(client, usuario_administrador
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/eliminar-regador/{id_regador}")
 
     assert response.status_code == 204
@@ -418,7 +433,7 @@ def test_listar_regadores_no_muestra_dados_de_baja(client, usuario_administrador
     response = client.get("/regadores/")
 
     assert response.status_code == 200
-    assert response.get_json() == []
+    assert "Juan" not in response.get_data(as_text=True)
 
 def test_login_regador_dado_de_baja(client, usuario_administrador):
     response = client.post("/auth/login", data={
@@ -434,9 +449,9 @@ def test_login_regador_dado_de_baja(client, usuario_administrador):
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/eliminar-regador/{id_regador}")
 
     assert response.status_code == 204
@@ -466,9 +481,10 @@ def test_crear_regador_carnet_letras(client, usuario_administrador):
         "carnet_conducir": "AB12345"
     })
 
-    assert response.status_code == 400
+    assert response.status_code == 200
 
-    assert "carnet_conducir" in response.get_json()
+    assert "El carnet de conducir solo puede tener números" in response.get_data(as_text=True)
+    assert Regador.query.count() == 0
 
 def test_editar_regador_carnet_letras(client, usuario_administrador):
     response = client.post("/auth/login", data={
@@ -484,9 +500,9 @@ def test_editar_regador_carnet_letras(client, usuario_administrador):
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/editar-regador/{id_regador}", data={
         "carnet_conducir": "AB12345"
     })
@@ -523,9 +539,9 @@ def test_activar_regador_como_administrador(client, usuario_administrador):
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/eliminar-regador/{id_regador}")
 
     assert response.status_code == 204
@@ -541,8 +557,7 @@ def test_activar_regador_como_administrador(client, usuario_administrador):
     response = client.get("/regadores/")
 
     assert response.status_code == 200
-    assert len(response.get_json()) == 1 #Vuelve a aparecer en el listado
-    assert response.get_json()[0]["id"] == id_regador
+    assert "Juan" in response.get_data(as_text=True) #Vuelve a aparecer en el listado
 
 def test_activar_regador_inexistente(client, usuario_administrador):
     response = client.post("/auth/login", data={
@@ -567,9 +582,9 @@ def test_login_regador_reactivado(client, usuario_administrador):
         "dni": "12345678"
     })
 
-    assert response.status_code == 201
+    assert response.status_code == 302 #Redirige al listado
 
-    id_regador = response.get_json()["id"]
+    id_regador = Regador.query.filter_by(dni="12345678").first().usuario_id
     response = client.post(f"/regadores/eliminar-regador/{id_regador}")
 
     assert response.status_code == 204
