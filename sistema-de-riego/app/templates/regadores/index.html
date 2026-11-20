@@ -1,0 +1,87 @@
+{% extends "base_auth.html" %}
+{% block title %}Regadores - Gestión de Riego{% endblock %}
+
+{% block content %}
+<div class="bg-[#EAF0F8] px-4 sm:px-8 py-6 sm:py-8 min-h-[75vh]">
+  <section class="max-w-5xl mx-auto bg-white p-5 sm:p-8 rounded-md border border-[#C3D1E6]">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-xl sm:text-2xl text-[#123A7A] font-semibold">
+          Regadores
+        </h1>
+        <p class="text-sm text-[#4B5B75] mt-1">
+          Personal habilitado para conducir los camiones regadores.
+        </p>
+      </div>
+
+      <a
+        href="{{ url_for('regadores.crear_regador') }}"
+        class="inline-flex items-center justify-center gap-2 bg-[#123A7A] hover:bg-[#1B4F9C] text-white text-sm font-medium px-4 py-2 rounded-sm transition-colors"
+      >
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        Nuevo regador
+      </a>
+    </div>
+
+    {% if regadores %}
+      <div class="overflow-x-auto border border-[#C3D1E6] rounded-sm">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead class="bg-[#EAF0F8] text-[#123A7A] border-b border-[#C3D1E6]">
+            <tr>
+              <th class="py-3 px-4 font-semibold">Nombre y apellido</th>
+              <th class="py-3 px-4 font-semibold">DNI</th>
+              <th class="py-3 px-4 font-semibold">Teléfono</th>
+              <th class="py-3 px-4 font-semibold">Email</th>
+              <th class="py-3 px-4 font-semibold text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#D5DFEE]">
+            {% for regador in regadores %}
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-medium text-[#17233A]">
+                  {{ regador.usuario.nombre }} {{ regador.usuario.apellido }}
+                </td>
+                <td class="py-3 px-4 text-[#4B5B75]">{{ regador.dni }}</td>
+                <td class="py-3 px-4 text-[#4B5B75]">{{ regador.telefono or "—" }}</td>
+                <td class="py-3 px-4 text-[#4B5B75]">{{ regador.usuario.email }}</td>
+                <td class="py-3 px-4">
+                  <div class="flex items-center justify-end gap-3">
+                    {# TODO pasos 3, 4 y 5: conectar con detalle, edición y baja #}
+                    <a
+                      href="#"
+                      class="inline-flex items-center gap-1 text-[#1B4F9C] hover:text-[#123A7A] font-medium"
+                    >
+                      <i data-lucide="eye" class="w-4 h-4"></i>
+                      Ver
+                    </a>
+                    <a
+                      href="#"
+                      class="inline-flex items-center gap-1 text-[#4B5B75] hover:text-[#17233A] font-medium"
+                    >
+                      <i data-lucide="pencil" class="w-4 h-4"></i>
+                      Editar
+                    </a>
+                    <a
+                      href="#"
+                      class="inline-flex items-center gap-1 text-red-600 hover:text-red-800 font-medium"
+                    >
+                      <i data-lucide="user-x" class="w-4 h-4"></i>
+                      Dar de baja
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="text-center py-10 border border-dashed border-[#C3D1E6] rounded-sm">
+        <p class="text-[#4B5B75] text-sm">
+          No hay regadores cargados todavía.
+        </p>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
